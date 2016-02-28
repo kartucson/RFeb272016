@@ -1,0 +1,46 @@
+
+Call:
+C5.0.default(x = x, y = as.factor(y))
+
+
+C5.0 [Release 2.07 GPL Edition]  	Sat Feb 27 15:42:38 2016
+-------------------------------
+
+Class specified by attribute `outcome'
+
+Read 150 cases (5 attributes) from undefined.data
+
+Decision tree:
+
+Petal.Length <= 1.9: setosa (50)
+Petal.Length > 1.9:
+:...Petal.Width > 1.7: virginica (46/1)
+    Petal.Width <= 1.7:
+    :...Petal.Length <= 4.9: versicolor (48/1)
+        Petal.Length > 4.9: virginica (6/2)
+
+
+Evaluation on training data (150 cases):
+
+	    Decision Tree   
+	  ----------------  
+	  Size      Errors  
+
+	     4    4( 2.7%)   <<
+
+
+	   (a)   (b)   (c)    <-classified as
+	  ----  ----  ----
+	    50                (a): class setosa
+	          47     3    (b): class versicolor
+	           1    49    (c): class virginica
+
+
+	Attribute usage:
+
+	100.00%	Petal.Length
+	 66.67%	Petal.Width
+
+
+Time: 0.0 secs
+

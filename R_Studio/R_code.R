@@ -20,13 +20,14 @@ na_count <-sapply(in_2011, function(y) sum(length(which(is.na(y)))))
 
 in_2011 <- na.omit(in_2011)
 ## ETL ##
+in_2011$SCUD[is.na(in_2011$SCUD)] = mean(in_2011$SCUD,na.rm=T)
 
 library(Rcmdr)
 library(data.table)
 library(dplyr)
 
 # Use aggregate
-CHRGS_agg <- aggregate(CHRGS~ccsdxgrp,data=in_2011,mean) 
+CHRGS_agg <- aggregate(CHRGS~ccsdxgrp,data=in_2011,FUN = function(x) {nrow(x)}) 
 
 # data table
 in_2011_DT <- data.table(in_2011)
@@ -37,14 +38,13 @@ in_2011_dplyr_all <- in_2011 %>% select(CHRGS,ccsdxgrp) %>%    group_by(ccsdxgrp
 in_2011_dplyr_some_labels <- in_2011 %>% select(CHRGS,ccsdxgrp) %>% filter(ccsdxgrp %in% c(1:5)) %>%   group_by(ccsdxgrp) %>% summarize(mean.CHRGS = mean(CHRGS))
 in_2011_dplyr_try_again <- in_2011 %>% select(CHRGS,ccsdxgrp) %>% filter(ccsdxgrp %in% c(1:5)) %>%   group_by(ccsdxgrp) %>% summarize(mean.CHRGS = mean(CHRGS,na.rm=T))
 
-## Just for illustration
-library(rPython)
-
 ## Viz ##
 
 library(ggplot2)
 ggplot(in_2011, aes(x = pdays, y=CHRGS)) + geom_point()
 ggplot(in_2011, aes(x = pdays, y=CHRGS)) + geom_point() + xlim(0,100) + ylim(0,50000) 
+ggplot(data= in_2011, aes(x = intage, y=CHRGS))  +geom_point() 
+
 ggplot(in_2011, aes(x = pdays, y=CHRGS)) + geom_point() + xlim(0,100) + ylim(0,50000) + aes(colour = in_2011$ccsdxgrp)
 
 jpeg(file="Scatterplot.jpg")
@@ -84,10 +84,19 @@ plot3d(wt, disp, mpg, col="red", size=3)
 
 adv <- read.csv("Advertising.csv")  ## The dataset used in class
 
+adv2 <- adv[,2:5]
+
 plot(adv$Sales,adv$TV)  ## Better correlation but possibly non-linear 
 plot(adv$Sales,adv$Radio) ## Lesser correlation 
 
-summary(lm(Sales~TV, data=adv))          ## Single variable fit
+ggplot(data=adv,aes(x=Radio,y=Sales)) + geom_point() + geom_smooth(formula=y~x)
+
+cor(adv$Sales,adv$Radio)
+
+model_1 <- lm(Sales~ TV+Radio+Newspaper,data=adv)
+summary(model_1)
+
+summary(lm(Sales~TV+Radio, data=adv))          ## Single variable fit
 lin1 <- lm(Sales~I(TV^0.5), data=adv)    ## Better fit
 summary(lin1)
 
@@ -97,7 +106,6 @@ summary(lm(Sales~Radio*TV+  Radio*I(TV^0.5) + Radio*I(TV^2) , data=adv))  ## Int
 summary(lm(Sales~Radio*TV, data=adv))  ## Simply using TV and Radio first order and interactions
 summary(lm(Sales~Radio:TV+ Radio + I(TV^0.5), data=adv)) ## Better legit fit than previous one  
 summary(lm(Sales~Radio*TV + I(TV^0.5), data=adv)) ## Best model as of now and we will stop at this in case of OLS  
-
 
 library(caret)
 library(glmnet)

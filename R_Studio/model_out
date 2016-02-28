@@ -1,0 +1,21 @@
+
+Call:
+lm(formula = Sales ~ TV + Radio, data = adv)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-8.7977 -0.8752  0.2422  1.1708  2.8328 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept)  2.92110    0.29449   9.919   <2e-16 ***
+TV           0.04575    0.00139  32.909   <2e-16 ***
+Radio        0.18799    0.00804  23.382   <2e-16 ***
+---
+Signif. codes:  
+0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 1.681 on 197 degrees of freedom
+Multiple R-squared:  0.8972,	Adjusted R-squared:  0.8962 
+F-statistic: 859.6 on 2 and 197 DF,  p-value: < 2.2e-16
+
